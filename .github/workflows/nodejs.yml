@@ -6,7 +6,7 @@ name: Node CI
 on: [push]
 
 jobs:
-  lint and test:
+  lint-n-test:
 
     runs-on: ubuntu-latest
 
