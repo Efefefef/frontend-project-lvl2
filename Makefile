@@ -8,7 +8,7 @@ lint:
 	npx eslint .
 
 test:
-	npm test
+	npx jest
 
 test-coverage:
-	npm test -- --coverage
+	npx jest --coverage

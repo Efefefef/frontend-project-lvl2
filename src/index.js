@@ -20,7 +20,7 @@ const genDiff = (pathToFile1, pathToFile2) => {
   const removedLines = Object.keys(before)
     .filter((key) => after[key] === undefined)
     .map((key) => `  - ${key}: ${before[key]}`);
-  return `{\n${[...notChangedLines, ...changedLines, ...addedLines, ...removedLines].join('\n')}\n}`;
+  return `{\n${[...notChangedLines, ...changedLines, ...addedLines, ...removedLines].join('\n')}\n}\n`;
 };
 
 export const startUtil = () => {

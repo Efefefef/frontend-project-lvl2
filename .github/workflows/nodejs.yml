@@ -23,3 +23,9 @@ jobs:
       run: make lint
     - name: Test
       run: make test
+    - name: Coverage
+    - uses: paambaati/codeclimate-action@v2.2.4
+    env:
+      CC_TEST_REPORTER_ID: 75cab70afa39c6effe0999faa88232d13f0924e87aac52434b0e01a26f02cb0f
+    with:
+      coverageCommand: make test-coverage
