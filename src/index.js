@@ -1,13 +1,9 @@
-import fs from 'fs';
-import path from 'path';
 import program from 'commander';
+import parseFile from './parsers';
 
 const genDiff = (pathToFile1, pathToFile2) => {
-  const getPath = (filePath) => (filePath[0] === '/' ? filePath : path.resolve(process.cwd(), filePath));
-  const file1 = fs.readFileSync(getPath(pathToFile1));
-  const file2 = fs.readFileSync(getPath(pathToFile2));
-  const before = JSON.parse(file1);
-  const after = JSON.parse(file2);
+  const before = parseFile(pathToFile1);
+  const after = parseFile(pathToFile2);
   const notChangedLines = Object.keys(after)
     .filter((key) => before[key] === after[key])
     .map((key) => `    ${key}: ${after[key]}`);
