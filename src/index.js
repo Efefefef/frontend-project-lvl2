@@ -29,10 +29,15 @@ const genDiff = (pathToFile1, pathToFile2, format) => {
   const before = parseFile(pathToFile1);
   const after = parseFile(pathToFile2);
   const diff = findDiffs(before, after);
+  let render;
   if (format === 'plain') {
-    return formatters.plainRender(diff);
+    render = formatters.plainRender;
+  } else if (format === 'json') {
+    render = formatters.jsonRender;
+  } else {
+    render = formatters.defaultRender;
   }
-  return formatters.defaultRender(diff);
+  return render(diff);
 };
 
 export const startUtil = () => {
