@@ -1,9 +1,9 @@
-import defaultFormatter from './default-formatter';
-import plainFormatter from './plain-formatter';
+import defaultRender from './default-formatter';
+import plainRender from './plain-formatter';
 
 const formatters = {
-  defaultFormatter,
-  plainFormatter,
+  defaultRender,
+  plainRender,
 };
 
 export default formatters;
