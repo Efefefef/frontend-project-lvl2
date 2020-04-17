@@ -2,10 +2,10 @@ import defaultRender from './default-formatter';
 import plainRender from './plain-formatter';
 import jsonRender from './json-formatter';
 
-const formatters = {
-  defaultRender,
-  plainRender,
-  jsonRender,
+const render = (diff, format) => {
+  if (format === 'plain') return plainRender(diff);
+  if (format === 'json') return jsonRender(diff);
+  return defaultRender(diff);
 };
 
-export default formatters;
+export default render;

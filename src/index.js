@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import parseFile from './parsers';
-import formatters from './formatters';
+import render from './formatters';
 
 const buildDiff = (obj1, obj2) => {
   const uniqJointKeys = _.uniq([...Object.keys(obj1), ...Object.keys(obj2)]);
@@ -31,15 +31,7 @@ const genDiff = (pathToFile1, pathToFile2, format) => {
   const fileDataBefore = parseFile(pathToFile1);
   const fileDataAfter = parseFile(pathToFile2);
   const diff = buildDiff(fileDataBefore, fileDataAfter);
-  let render;
-  if (format === 'plain') {
-    render = formatters.plainRender;
-  } else if (format === 'json') {
-    render = formatters.jsonRender;
-  } else {
-    render = formatters.defaultRender;
-  }
-  return render(diff);
+  return render(diff, format);
 };
 
 export default genDiff;
