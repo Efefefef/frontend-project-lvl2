@@ -2,12 +2,12 @@ import program from 'commander';
 import parseFile from './parsers';
 import formatters from './formatters';
 
-const findDiffs = (obj1, obj2) => {
+const buildDiff = (obj1, obj2) => {
   const sameKeyLines = Object.keys(obj2)
     .filter((key) => Object.hasOwnProperty.call(obj1, key) && Object.hasOwnProperty.call(obj2, key))
     .map((key) => {
       if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
-        return { type: 'deepChanged', key, children: findDiffs(obj1[key], obj2[key]) };
+        return { type: 'deepChanged', key, children: buildDiff(obj1[key], obj2[key]) };
       }
       if (obj1[key] === obj2[key]) {
         return { type: 'unchanged', key, value: obj1[key] };
@@ -26,9 +26,9 @@ const findDiffs = (obj1, obj2) => {
 };
 
 const genDiff = (pathToFile1, pathToFile2, format) => {
-  const before = parseFile(pathToFile1);
-  const after = parseFile(pathToFile2);
-  const diff = findDiffs(before, after);
+  const fileDataBefore = parseFile(pathToFile1);
+  const fileDataAfter = parseFile(pathToFile2);
+  const diff = buildDiff(fileDataBefore, fileDataAfter);
   let render;
   if (format === 'plain') {
     render = formatters.plainRender;
