@@ -1,29 +1,30 @@
 import _ from 'lodash';
-import program from 'commander';
 import parseFile from './parsers';
 import formatters from './formatters';
 
 const buildDiff = (obj1, obj2) => {
-  const sameKeyLines = Object.keys(obj2)
-    .filter((key) => _.has(obj1, key) && _.has(obj2, key))
-    .map((key) => {
+  const uniqJointKeys = _.uniq([...Object.keys(obj1), ...Object.keys(obj2)]);
+  return uniqJointKeys.map((key) => {
+    let keyDiff;
+    if (_.has(obj1, key) && _.has(obj2, key)) {
       if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
-        return { type: 'deepChanged', key, children: buildDiff(obj1[key], obj2[key]) };
+        keyDiff = { type: 'deepChanged', key, children: buildDiff(obj1[key], obj2[key]) };
+      } else if (obj1[key] === obj2[key]) {
+        keyDiff = { type: 'unchanged', key, value: obj1[key] };
+      } else {
+        keyDiff = {
+          type: 'changed', key, oldValue: obj1[key], newValue: obj2[key],
+        };
       }
-      if (obj1[key] === obj2[key]) {
-        return { type: 'unchanged', key, value: obj1[key] };
-      }
-      return {
-        type: 'changed', key, oldValue: obj1[key], newValue: obj2[key],
-      };
-    });
-  const addedLines = Object.keys(obj2)
-    .filter((key) => obj1[key] === undefined)
-    .map((key) => ({ type: 'added', key, value: obj2[key] }));
-  const removedLines = Object.keys(obj1)
-    .filter((key) => obj2[key] === undefined)
-    .map((key) => ({ type: 'removed', key, value: obj1[key] }));
-  return [...sameKeyLines, ...removedLines, ...addedLines];
+    }
+    if (!_.has(obj1, key)) {
+      keyDiff = { type: 'added', key, value: obj2[key] };
+    }
+    if (!_.has(obj2, key)) {
+      keyDiff = { type: 'removed', key, value: obj1[key] };
+    }
+    return keyDiff;
+  });
 };
 
 const genDiff = (pathToFile1, pathToFile2, format) => {
@@ -39,18 +40,6 @@ const genDiff = (pathToFile1, pathToFile2, format) => {
     render = formatters.defaultRender;
   }
   return render(diff);
-};
-
-export const startUtil = () => {
-  program
-    .version('0.0.1')
-    .arguments('<firstConfig> <secondConfig>')
-    .action((firstConfig, secondConfig) => {
-      console.log(genDiff(firstConfig, secondConfig, program.format));
-    })
-    .option('-f, --format <format>', 'output format', 'default');
-  program.description('Compares two configuration files and shows a difference.');
-  program.parse(process.argv);
 };
 
 export default genDiff;

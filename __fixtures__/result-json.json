@@ -9,6 +9,11 @@
         "value": "Value 1"
       },
       {
+        "type": "removed",
+        "key": "setting2",
+        "value": 200
+      },
+      {
         "type": "changed",
         "key": "setting3",
         "oldValue": true,
@@ -31,11 +36,6 @@
             "value": "vops"
           }
         ]
-      },
-      {
-        "type": "removed",
-        "key": "setting2",
-        "value": 200
       },
       {
         "type": "added",
@@ -61,15 +61,15 @@
     "key": "group1",
     "children": [
       {
-        "type": "unchanged",
-        "key": "foo",
-        "value": "bar"
-      },
-      {
         "type": "changed",
         "key": "baz",
         "oldValue": "bas",
         "newValue": "bars"
+      },
+      {
+        "type": "unchanged",
+        "key": "foo",
+        "value": "bar"
       },
       {
         "type": "changed",
