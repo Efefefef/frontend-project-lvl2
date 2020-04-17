@@ -3,10 +3,9 @@ import fs from 'fs';
 import path from 'path';
 import ini from 'ini';
 
-const parseFile = (pathToFile) => {
-  const getPath = (filePath) => (filePath[0] === '/' ? filePath : path.resolve(process.cwd(), filePath));
-  const format = path.extname(pathToFile);
-  const data = fs.readFileSync(getPath(pathToFile), 'utf-8');
+const getPath = (filePath) => (filePath[0] === '/' ? filePath : path.resolve(process.cwd(), filePath));
+
+const parseData = (data, format) => {
   let parse;
   if (format === '.json') {
     parse = JSON.parse;
@@ -18,5 +17,10 @@ const parseFile = (pathToFile) => {
   return parse(data);
 };
 
+const parseFile = (pathToFile) => {
+  const data = fs.readFileSync(getPath(pathToFile), 'utf-8');
+  const format = path.extname(pathToFile);
+  return parseData(data, format);
+};
 
 export default parseFile;
