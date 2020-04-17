@@ -1,10 +1,11 @@
+import _ from 'lodash';
 import program from 'commander';
 import parseFile from './parsers';
 import formatters from './formatters';
 
 const buildDiff = (obj1, obj2) => {
   const sameKeyLines = Object.keys(obj2)
-    .filter((key) => Object.hasOwnProperty.call(obj1, key) && Object.hasOwnProperty.call(obj2, key))
+    .filter((key) => _.has(obj1, key) && _.has(obj2, key))
     .map((key) => {
       if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
         return { type: 'deepChanged', key, children: buildDiff(obj1[key], obj2[key]) };
