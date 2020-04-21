@@ -4,6 +4,11 @@
     "key": "common",
     "children": [
       {
+        "type": "added",
+        "key": "follow",
+        "value": false
+      },
+      {
         "type": "unchanged",
         "key": "setting1",
         "value": "Value 1"
@@ -22,6 +27,18 @@
         }
       },
       {
+        "type": "added",
+        "key": "setting4",
+        "value": "blah blah"
+      },
+      {
+        "type": "added",
+        "key": "setting5",
+        "value": {
+          "key5": "value5"
+        }
+      },
+      {
         "type": "deepChanged",
         "key": "setting6",
         "children": [
@@ -36,23 +53,6 @@
             "value": "vops"
           }
         ]
-      },
-      {
-        "type": "added",
-        "key": "follow",
-        "value": false
-      },
-      {
-        "type": "added",
-        "key": "setting4",
-        "value": "blah blah"
-      },
-      {
-        "type": "added",
-        "key": "setting5",
-        "value": {
-          "key5": "value5"
-        }
       }
     ]
   },

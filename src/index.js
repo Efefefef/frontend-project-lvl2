@@ -27,11 +27,28 @@ const buildDiff = (obj1, obj2) => {
   });
 };
 
+const sortDiffs = (diffs) => {
+  const sorted = diffs.sort((a, b) => {
+    if (a.key > b.key) {
+      return 1;
+    }
+    if (b.key > a.key) {
+      return -1;
+    }
+    return 0;
+  });
+  return sorted.map((diff) => {
+    if (diff.children) return ({ ...diff, children: sortDiffs(diff.children) });
+    return diff;
+  });
+};
+
 const genDiff = (pathToFile1, pathToFile2, format) => {
   const fileDataBefore = parseData(readFile(pathToFile1), path.extname(pathToFile1).slice(1));
   const fileDataAfter = parseData(readFile(pathToFile2), path.extname(pathToFile2).slice(1));
-  const diff = buildDiff(fileDataBefore, fileDataAfter);
-  return render(diff, format);
+  const diffs = buildDiff(fileDataBefore, fileDataAfter);
+  const sortedDiff = sortDiffs(diffs);
+  return render(sortedDiff, format);
 };
 
 export default genDiff;

@@ -1,5 +1,3 @@
-import sortDiff from '../utils';
-
 const buildPath = (key, path) => path + key;
 
 const stringify = (value) => {
@@ -9,31 +7,28 @@ const stringify = (value) => {
   return `'${value}'`;
 };
 
-const parse = (diffs, path = '') => {
-  const sortedDiff = sortDiff(diffs);
-  return sortedDiff.map((diff) => {
-    switch (diff.type) {
-      case 'added': {
-        return `Property '${buildPath(diff.key, path)}' was added with value: ${stringify(diff.value)}`;
-      }
-      case 'removed': {
-        return `Property '${buildPath(diff.key, path)}' was deleted`;
-      }
-      case 'changed': {
-        return `Property '${buildPath(diff.key, path)}' was changed from ${stringify(diff.oldValue)} to ${stringify(diff.newValue)}`;
-      }
-      case 'deepChanged': {
-        return parse(diff.children, `${buildPath(diff.key, path)}.`).join('\n');
-      }
-      case 'unchanged': {
-        return null;
-      }
-      default: {
-        throw new Error(`Unknown diff type: ${diff.type}`);
-      }
+const parse = (diffs, path = '') => diffs.map((diff) => {
+  switch (diff.type) {
+    case 'added': {
+      return `Property '${buildPath(diff.key, path)}' was added with value: ${stringify(diff.value)}`;
     }
-  }).filter((diff) => diff);
-};
+    case 'removed': {
+      return `Property '${buildPath(diff.key, path)}' was deleted`;
+    }
+    case 'changed': {
+      return `Property '${buildPath(diff.key, path)}' was changed from ${stringify(diff.oldValue)} to ${stringify(diff.newValue)}`;
+    }
+    case 'deepChanged': {
+      return parse(diff.children, `${buildPath(diff.key, path)}.`).join('\n');
+    }
+    case 'unchanged': {
+      return null;
+    }
+    default: {
+      throw new Error(`Unknown diff type: ${diff.type}`);
+    }
+  }
+}).filter((diff) => diff);
 
 const render = (diffs) => `${parse(diffs).join('\n')}`;
 
