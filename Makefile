@@ -12,3 +12,6 @@ test:
 
 test-coverage:
 	npx jest --coverage
+
+transpile:
+	npx babel src --out-dir dist
