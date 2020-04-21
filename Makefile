@@ -1,6 +1,9 @@
 install:
 	npm install
 
+build:
+	npx babel src --out-dir dist
+
 publish:
 	npm publish --dry-run
 
@@ -13,5 +16,3 @@ test:
 test-coverage:
 	npx jest --coverage
 
-transpile:
-	npx babel src --out-dir dist
