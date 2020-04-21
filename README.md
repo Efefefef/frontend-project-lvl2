@@ -3,11 +3,11 @@
 
 <h1>Diff utility</h1>
 
-Compares two `json`, `yml` or `ini` files and shows a difference.
+Compares two `json`, `yml` or `ini` files and shows a difference
 
 Output is possible in several different formats
 
-You could run it as CLI utility or import as a library
+You could run it as a CLI utility or import as a library
 
 <h2>Install</h2>
 
@@ -34,12 +34,12 @@ You can change the format option by passing
 
 Default formatting with no option provided:
 
-ascii format=default
+[![asciicast](https://asciinema.org/a/RmZcJiJX9eSsj1xGXGbJ3NcYx.svg)](https://asciinema.org/a/RmZcJiJX9eSsj1xGXGbJ3NcYx)
 
 For plain formatting pass `-f plain`:
 
-ascii format=yml
+[![asciicast](https://asciinema.org/a/kNhS4QiOqnvZqewiDW4nPRdHh.svg)](https://asciinema.org/a/kNhS4QiOqnvZqewiDW4nPRdHh)
 
 For json formatting pass `-f json`:
 
-ascii format=ini
+[![asciicast](https://asciinema.org/a/hB2udU4kKhGQBCnSoHyhCN3Ow.svg)](https://asciinema.org/a/hB2udU4kKhGQBCnSoHyhCN3Ow)
