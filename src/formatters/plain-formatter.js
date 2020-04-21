@@ -11,30 +11,28 @@ const stringify = (value) => {
 
 const parse = (diffs, path = '') => {
   const sortedDiff = sortDiff(diffs);
-  return sortedDiff.reduce((acc, diff) => {
+  return sortedDiff.map((diff) => {
     switch (diff.type) {
       case 'added': {
-        acc.push(`Property '${buildPath(diff.key, path)}' was added with value: ${stringify(diff.value)}`);
-        break;
+        return `Property '${buildPath(diff.key, path)}' was added with value: ${stringify(diff.value)}`;
       }
       case 'removed': {
-        acc.push(`Property '${buildPath(diff.key, path)}' was deleted`);
-        break;
+        return `Property '${buildPath(diff.key, path)}' was deleted`;
       }
       case 'changed': {
-        acc.push(`Property '${buildPath(diff.key, path)}' was changed from ${stringify(diff.oldValue)} to ${stringify(diff.newValue)}`);
-        break;
+        return `Property '${buildPath(diff.key, path)}' was changed from ${stringify(diff.oldValue)} to ${stringify(diff.newValue)}`;
       }
       case 'deepChanged': {
-        acc.push(parse(diff.children, `${buildPath(diff.key, path)}.`).join('\n'));
-        break;
+        return parse(diff.children, `${buildPath(diff.key, path)}.`).join('\n');
+      }
+      case 'unchanged': {
+        return null;
       }
       default: {
-        return acc;
+        throw new Error(`Unknown diff type: ${diff.type}`);
       }
     }
-    return acc;
-  }, []);
+  }).filter((diff) => diff);
 };
 
 const render = (diffs) => `${parse(diffs).join('\n')}`;
