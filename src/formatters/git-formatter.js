@@ -1,38 +1,35 @@
 const indentationStep = 2;
 
 const stringify = (key, value, prepend, indent) => {
-  if (typeof value === 'object') {
-    const lines = Object.entries(value).map(([a, b]) => `${' '.repeat(indent + indentationStep * 3)}${a}: ${b}`);
-    return `${' '.repeat(indent)}${prepend} ${key}: {\n${lines}\n${' '.repeat(indent + indentationStep)}}`;
+  if (typeof value !== 'object') {
+    return `${' '.repeat(indent)}${prepend} ${key}: ${value}`;
   }
-  return `${' '.repeat(indent)}${prepend} ${key}: ${value}`;
+  const lines = Object.entries(value).map(([a, b]) => `${' '.repeat(indent + indentationStep * 3)}${a}: ${b}`);
+  return `${' '.repeat(indent)}${prepend} ${key}: {\n${lines}\n${' '.repeat(indent + indentationStep)}}`;
 };
 
-const parse = (diffs, indent = indentationStep) => diffs.map((diff) => {
+const format = (diffs, depth = 0) => diffs.map((diff) => {
+  const indent = depth * 2 * indentationStep + indentationStep;
+  const nestedIndent = indent + indentationStep;
   switch (diff.type) {
-    case 'added': {
+    case 'added':
       return stringify(diff.key, diff.value, '+', indent);
-    }
-    case 'removed': {
+    case 'removed':
       return stringify(diff.key, diff.value, '-', indent);
-    }
-    case 'unchanged': {
+    case 'unchanged':
       return stringify(diff.key, diff.value, ' ', indent);
-    }
-    case 'changed': {
+    case 'changed':
       return `${stringify(diff.key, diff.oldValue, '-', indent)}\n${stringify(diff.key, diff.newValue, '+', indent)}`;
-    }
-    case 'deepChanged': {
-      const childLines = `${parse(diff.children, indent + indentationStep * 2)}\n`;
-      const wrapping = `${' '.repeat(indent + indentationStep)}${diff.key}: {\n${childLines}${' '.repeat(indent + indentationStep)}}`;
+    case 'nested': {
+      const childLines = `${format(diff.children, depth + 1)}\n`;
+      const wrapping = `${' '.repeat(nestedIndent)}${diff.key}: {\n${childLines}${' '.repeat(nestedIndent)}}`;
       return wrapping;
     }
-    default: {
+    default:
       throw new Error(`Unknown diff type: ${diff.type}`);
-    }
   }
 }).join('\n');
 
-const render = (diffs) => `{\n${parse(diffs)}\n}`;
+const render = (diffs) => `{\n${format(diffs)}\n}`;
 
 export default render;
