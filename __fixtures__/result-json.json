@@ -1,6 +1,6 @@
 [
   {
-    "type": "deepChanged",
+    "type": "nested",
     "key": "common",
     "children": [
       {
@@ -39,7 +39,7 @@
         }
       },
       {
-        "type": "deepChanged",
+        "type": "nested",
         "key": "setting6",
         "children": [
           {
@@ -57,7 +57,7 @@
     ]
   },
   {
-    "type": "deepChanged",
+    "type": "nested",
     "key": "group1",
     "children": [
       {
